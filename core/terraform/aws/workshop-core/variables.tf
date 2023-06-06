@@ -68,3 +68,11 @@ variable "availability_zones" {
   type        = list
   description = "List of availability zones"
 }
+
+variable "ccloud_cluster_id" {
+  description = "Confluent Cloud Cluster ID"
+}
+
+variable "ccloud_rest_endpoint" {
+  description = "Confluent Cloud REST endpoint"
+}

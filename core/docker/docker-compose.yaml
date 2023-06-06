@@ -18,6 +18,7 @@ services:
       - zookeeper
     ports:
       - "9092:9092"
+      - "8090:8090"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
@@ -36,7 +37,8 @@ services:
       KAFKA_LOG4J_LOGGERS: "kafka.controller=WARN,state.change.logger=WARN,kafka.log.LogCleaner=WARN"
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-
+      KAFKA_PASSWORD_ENCODER_SECRET: mysecret
+      
   schema-registry:
     image: confluentinc/cp-schema-registry:${CONFLUENT_DOCKER_TAG}
     hostname: schema-registry
@@ -129,7 +131,7 @@ services:
       CONNECT_SASL_MECHANISM: PLAIN
       CONNECT_SASL_JAAS_CONFIG: org.apache.kafka.common.security.plain.PlainLoginModule required username="${CCLOUD_API_KEY}" password="${CCLOUD_API_SECRET}";
       CONNECT_REST_PORT: 8084
-      CONNECT_REST_ADVERTISED_PORT: 18084
+      #CONNECT_REST_ADVERTISED_PORT: 18084
       CONNECT_LISTENERS: http://0.0.0.0:8084
       CONNECT_GROUP_ID: ${DC}-kafka-connect-ccloud
       CONNECT_KAFKA_HEAP_OPTS: "-Xms256M -Xmx4G"

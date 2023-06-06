@@ -25,6 +25,8 @@ module "workshop-core" {
   ccloud_bootstrap_servers = module.workshop-confluent-core.boostrap
   ccloud_api_key           = module.workshop-confluent-core.cluster_api_key
   ccloud_api_secret        = module.workshop-confluent-core.cluster_api_secret
+  ccloud_cluster_id        = module.workshop-confluent-core.cluster_id
+  ccloud_rest_endpoint     = module.workshop-confluent-core.rest_endpoint
 #  ccloud_topics            = var.ccloud_topics
   onprem_topics            = var.onprem_topics
   feedback_form_url        = var.feedback_form_url
@@ -35,6 +37,7 @@ module "workshop-confluent-core" {
   source                   = "././common/confluent-cloud"
   ccloud_api_key           = var.ccloud_api_key
   ccloud_api_secret        = var.ccloud_api_secret
+  ccloud_env_name          = var.ccloud_env_name
   ccloud_cluster_name      = var.ccloud_cluster_name
   region                   = var.region
   participant_count        = var.participant_count

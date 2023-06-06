@@ -16,7 +16,7 @@ include::bits/intro.adoc[]
 
 include::bits/workshop-env.adoc[]
 
-include::bits/main.adoc[]
+include::bits/main-cl.adoc[]
 
 #EXTENSIONS_PLACEHOLDER#
 

@@ -21,7 +21,7 @@ provider "confluent" {
 }
 
 resource "confluent_environment" "hybrid-workshop" {
-  display_name = "${var.name}-${var.ccloud_cluster_name}"
+  display_name = "${var.name}-${var.ccloud_env_name}"
 
 }
 
@@ -30,7 +30,10 @@ resource "confluent_kafka_cluster" "hybrid-cluster" {
   availability = var.ccloud_cluster_availability_type
   cloud        = upper(var.cloud_provider)
   region       = var.region
-  basic {}
+  #basic {}
+  dedicated {
+    cku = 1
+  }
 
   environment {
     id = confluent_environment.hybrid-workshop.id
@@ -80,9 +83,9 @@ resource "confluent_api_key" "hybrid-manager-kafka-api-key" {
 
     }
   }
-    depends_on = [
-      confluent_role_binding.hybrid-manager-kafka-cluster-admin
-    ]
+  depends_on = [
+    confluent_role_binding.hybrid-manager-kafka-cluster-admin
+  ]
 }
 
 

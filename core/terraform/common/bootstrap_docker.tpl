@@ -18,7 +18,7 @@ echo "CCLOUD_API_SECRET=${ccloud_api_secret}" >> .env
 echo "HOSTNAME"=$HOSTNAME >> .env
 echo "DC"=${dc} >> .env
 echo "ONPREM_TOPICS"=${onprem_topics} >> .env
-echo "CONFLUENT_DOCKER_TAG"=7.3.0 >> .env
+echo "CONFLUENT_DOCKER_TAG"=7.3.3 >> .env
 
 # select the DC correctly in the database simulator script and schema file.
 sed -i 's/dcxx/${dc}/g' ~/.workshop/docker/db_transaction_simulator/simulate_dbtrans.py
@@ -46,6 +46,21 @@ mkdir ~/.workshop/docker/.aws
 # startup the containers
 cd ~/.workshop/docker/
 docker-compose up -d
+
+# create enviornment variables for cluster linking commands
+cd ~
+echo "export DC=${dc}" >> .bashrc
+echo "export CCLOUD_CLUSTER_ENDPOINT=`echo ${ccloud_cluster_endpoint}|awk -F "//" '{ print $2 }'`" >> .bashrc
+echo "export CCLOUD_REST_ENDPOINT=${ccloud_rest_endpoint}" >> .bashrc
+echo "export CCLOUD_API_KEY=${ccloud_api_key}" >> .bashrc
+echo "export CCLOUD_API_SECRET=${ccloud_api_secret}" >> .bashrc
+echo "export CCLOUD_CLUSTER_ID=${ccloud_cluster_id}" >> .bashrc
+echo "export ENCODED_API_KEY_SECRET=`echo -n "${ccloud_api_key}:${ccloud_api_secret}"|base64 -w0`" >> .bashrc
+until $(curl --output /dev/null -sk --head --fail http://localhost:8090/kafka/v3/clusters); do
+    printf '.'
+    sleep 5
+done
+echo "export ONPREM_CLUSTER_ID=`curl -sk http://localhost:8090/kafka/v3/clusters|jq --raw-output .data[].cluster_id`" >> .bashrc
 
 cd ~/.workshop/docker/extensions
 for extension in */ ; do
